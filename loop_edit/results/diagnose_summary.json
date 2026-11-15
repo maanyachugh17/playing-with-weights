@@ -1,0 +1,11 @@
+{
+  "n": 20,
+  "hit_cap_rate": 0.1,
+  "early_repeat_rate": 0.9,
+  "boxed_rate": 0.25,
+  "finished_clean_rate": 0.0,
+  "mean_tokens": 330.4,
+  "mean_max_8gram": 2.9,
+  "math_verify_rate": 0.0,
+  "n_graded": 2
+}

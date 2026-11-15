@@ -1,0 +1,33 @@
+{
+  "model": "Qwen/Qwen2.5-0.5B",
+  "device": "cpu",
+  "method": "activation_magnitude_sparse_delete_on_gate_proj",
+  "target_delete": 0.001,
+  "calibration_n": 12,
+  "elapsed_sec": 104.89871621131897,
+  "mask": {
+    "format": "packbits_zstd",
+    "deleted": 104595,
+    "total_masked_params": 104595456,
+    "deleted_fraction_of_masked": 0.0009999956403459822
+  },
+  "deleted_fraction_of_model": 0.00021171672564035266,
+  "base_eval": {
+    "n": 16,
+    "mean_reward": 0.10625,
+    "boxed_rate": 0.0625,
+    "mean_chars": 227.1875
+  },
+  "masked_eval": {
+    "n": 16,
+    "mean_reward": 0.046875,
+    "boxed_rate": 0.0,
+    "mean_chars": 228.5625
+  },
+  "mask_dir": "weight-edits/deletion_tuning/results/our_mask",
+  "note": "Our mask: Wanda-style |W|*input-activation scores on gate_proj from our GSM8K calibration forwards; delete lowest 0.1% of gate weights. Not verl GRPO parity. Prior Adam-mask attempts archived under results/archive_*.",
+  "prior_attempts": {
+    "v1_random_half": "archive_v1_random50 \u2014 N(0,0.01) init deleted ~50%, quality collapsed",
+    "v2_keep_biased_ce": "keep init 2.5 + weak delete penalty \u2014 deleted 0"
+  }
+}

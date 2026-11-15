@@ -1,0 +1,12 @@
+**/__pycache__/
+*.pyc
+.cache/
+hf_cache/
+loop_edit/results/run.log
+loop_edit/results/ckpts/
+deletion_tuning/results/masked_model/
+# keep reports + frozen edit + mask; ignore bulky raw gens if huge — commit them if moderate
+loop_edit/results/*_generations.jsonl
+loop_edit/results/sweep_*.jsonl
+loop_edit/results/smoke_*.jsonl
+loop_edit/results/directions.npz

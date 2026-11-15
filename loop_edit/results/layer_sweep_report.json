@@ -1,0 +1,203 @@
+{
+  "base": {
+    "n": 8,
+    "hit_cap_rate": 1.0,
+    "early_repeat_rate": 1.0,
+    "boxed_rate": 0.25,
+    "finished_clean_rate": 0.0,
+    "mean_tokens": 512.0,
+    "mean_max_8gram": 3.625,
+    "mean_first_repeat_at": 273.5,
+    "no_repeat_rate": 0.0,
+    "math_verify_rate": 0.0,
+    "n_graded": 1
+  },
+  "results": [
+    {
+      "tag": "base",
+      "layers": [],
+      "alpha": null,
+      "k": null,
+      "summary": {
+        "n": 8,
+        "hit_cap_rate": 1.0,
+        "early_repeat_rate": 1.0,
+        "boxed_rate": 0.25,
+        "finished_clean_rate": 0.0,
+        "mean_tokens": 512.0,
+        "mean_max_8gram": 3.625,
+        "mean_first_repeat_at": 273.5,
+        "no_repeat_rate": 0.0,
+        "math_verify_rate": 0.0,
+        "n_graded": 1
+      },
+      "score": -1.25925
+    },
+    {
+      "tag": "a8.0_k64_L23-22",
+      "layers": [
+        23,
+        22
+      ],
+      "alpha": 8.0,
+      "k": 64,
+      "summary": {
+        "n": 8,
+        "hit_cap_rate": 0.875,
+        "early_repeat_rate": 1.0,
+        "boxed_rate": 0.0,
+        "finished_clean_rate": 0.0,
+        "mean_tokens": 502.875,
+        "mean_max_8gram": 128.25,
+        "mean_first_repeat_at": 184.75,
+        "no_repeat_rate": 0.0
+      },
+      "score": -7.918000000000001
+    },
+    {
+      "tag": "a8.0_k64_L21-20",
+      "layers": [
+        21,
+        20
+      ],
+      "alpha": 8.0,
+      "k": 64,
+      "summary": {
+        "n": 8,
+        "hit_cap_rate": 1.0,
+        "early_repeat_rate": 0.875,
+        "boxed_rate": 0.25,
+        "finished_clean_rate": 0.0,
+        "mean_tokens": 512.0,
+        "mean_max_8gram": 3.375,
+        "mean_first_repeat_at": 277.2857142857143,
+        "no_repeat_rate": 0.125,
+        "math_verify_rate": 0.0,
+        "n_graded": 1
+      },
+      "score": -0.9891785714285712
+    },
+    {
+      "tag": "a8.0_k64_L18-19",
+      "layers": [
+        18,
+        19
+      ],
+      "alpha": 8.0,
+      "k": 64,
+      "summary": {
+        "n": 8,
+        "hit_cap_rate": 1.0,
+        "early_repeat_rate": 1.0,
+        "boxed_rate": 0.25,
+        "finished_clean_rate": 0.0,
+        "mean_tokens": 512.0,
+        "mean_max_8gram": 3.75,
+        "mean_first_repeat_at": 288.375,
+        "no_repeat_rate": 0.0,
+        "math_verify_rate": 0.0,
+        "n_graded": 1
+      },
+      "score": -1.23575
+    },
+    {
+      "tag": "a8.0_k64_L23-22-21-20",
+      "layers": [
+        23,
+        22,
+        21,
+        20
+      ],
+      "alpha": 8.0,
+      "k": 64,
+      "summary": {
+        "n": 8,
+        "hit_cap_rate": 1.0,
+        "early_repeat_rate": 1.0,
+        "boxed_rate": 0.0,
+        "finished_clean_rate": 0.0,
+        "mean_tokens": 512.0,
+        "mean_max_8gram": 213.125,
+        "mean_first_repeat_at": 205.0,
+        "no_repeat_rate": 0.0
+      },
+      "score": -12.24625
+    },
+    {
+      "tag": "a6.0_k64_L21-20",
+      "layers": [
+        21,
+        20
+      ],
+      "alpha": 6.0,
+      "k": 64,
+      "summary": {
+        "n": 8,
+        "hit_cap_rate": 1.0,
+        "early_repeat_rate": 1.0,
+        "boxed_rate": 0.25,
+        "finished_clean_rate": 0.0,
+        "mean_tokens": 512.0,
+        "mean_max_8gram": 3.5,
+        "mean_first_repeat_at": 306.25,
+        "no_repeat_rate": 0.0,
+        "math_verify_rate": 0.0,
+        "n_graded": 1
+      },
+      "score": -1.1875
+    },
+    {
+      "tag": "a12.0_k64_L21-20",
+      "layers": [
+        21,
+        20
+      ],
+      "alpha": 12.0,
+      "k": 64,
+      "summary": {
+        "n": 8,
+        "hit_cap_rate": 1.0,
+        "early_repeat_rate": 1.0,
+        "boxed_rate": 0.125,
+        "finished_clean_rate": 0.0,
+        "mean_tokens": 512.0,
+        "mean_max_8gram": 3.875,
+        "mean_first_repeat_at": 294.875,
+        "no_repeat_rate": 0.0
+      },
+      "score": -1.4165
+    }
+  ],
+  "best": {
+    "tag": "a8.0_k64_L21-20",
+    "layers": [
+      21,
+      20
+    ],
+    "alpha": 8.0,
+    "k": 64,
+    "summary": {
+      "n": 8,
+      "hit_cap_rate": 1.0,
+      "early_repeat_rate": 0.875,
+      "boxed_rate": 0.25,
+      "finished_clean_rate": 0.0,
+      "mean_tokens": 512.0,
+      "mean_max_8gram": 3.375,
+      "mean_first_repeat_at": 277.2857142857143,
+      "no_repeat_rate": 0.125,
+      "math_verify_rate": 0.0,
+      "n_graded": 1
+    },
+    "score": -0.9891785714285712
+  },
+  "beats_base": true,
+  "protocol": {
+    "stop_on_repeat": false,
+    "max_new_tokens": 512,
+    "alpha_default": 8.0,
+    "k": 64,
+    "n_sweep": 8,
+    "device": "cpu"
+  }
+}

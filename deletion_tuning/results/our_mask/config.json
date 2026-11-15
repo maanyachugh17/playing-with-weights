@@ -1,0 +1,6 @@
+{
+  "format": "packbits_zstd",
+  "deleted": 104595,
+  "total_masked_params": 104595456,
+  "deleted_fraction_of_masked": 0.0009999956403459822
+}
