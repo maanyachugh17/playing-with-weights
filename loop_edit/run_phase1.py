@@ -50,9 +50,9 @@ def candidate_score(summary: dict) -> float:
 def run(args: argparse.Namespace) -> dict:
     RESULTS.mkdir(parents=True, exist_ok=True)
     t_start = time.time()
-    device = args.device
-    if device == "auto":
-        device = "cuda" if torch.cuda.is_available() else "cpu"
+    from .generate import resolve_device
+
+    device = resolve_device(args.device)
 
     splits = build_splits(
         n_diagnose=args.n_diagnose,

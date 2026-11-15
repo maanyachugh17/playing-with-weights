@@ -33,11 +33,30 @@ class EightGramRepeatStop(StoppingCriteria):
         return False
 
 
+def resolve_device(device: str = "auto") -> str:
+    """Prefer XPU (Intel Arc), then CUDA, else CPU."""
+    if device != "auto":
+        return device
+    if hasattr(torch, "xpu") and torch.xpu.is_available():
+        return "xpu"
+    if torch.cuda.is_available():
+        return "cuda"
+    return "cpu"
+
+
+def default_dtype_for_device(device: str) -> torch.dtype:
+    if device in ("xpu", "cuda"):
+        return torch.bfloat16
+    return torch.float32
+
+
 def load_model_and_tokenizer(
     model_id: str = "Qwen/Qwen3.5-0.8B",
-    dtype: torch.dtype = torch.float32,
+    dtype: torch.dtype | None = None,
     device: str = "cpu",
 ):
+    if dtype is None:
+        dtype = default_dtype_for_device(device)
     tok = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
