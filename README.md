@@ -17,7 +17,12 @@ Published checkpoints (e.g. `RikiyaT/Qwen3.5-0.8B-weight-space-programming`, `Ja
 pip install torch transformers datasets accelerate safetensors sentencepiece zstandard math-verify
 ```
 
-GPU is used when available (`--device auto`). On CPU, generation lengths are capped and loops are stopped early via 8-gram repetition.
+Accelerator order for `--device auto`: Intel **XPU** (Arc), then CUDA, else CPU. On CPU, generation lengths are capped and loops are stopped early via 8-gram repetition.
+
+```bash
+# Full XPU smoke (Arc), resume-safe after soft-stop
+python -m loop_edit.smoke_eval --device xpu --max-new 4096 --resume
+```
 
 ## Run loop edit (Phase 1)
 

@@ -9,4 +9,11 @@ deletion_tuning/results/masked_model/
 loop_edit/results/*_generations.jsonl
 loop_edit/results/sweep_*.jsonl
 loop_edit/results/smoke_*.jsonl
+# Keep XPU/GPU smoke dumps for resume checkpoints (override above).
+!loop_edit/results/smoke_base_gpu.jsonl
+!loop_edit/results/smoke_edited_gpu.jsonl
+!loop_edit/results/smoke_report_gpu.json
+!loop_edit/results/smoke_report_gpu.partial.json
+!loop_edit/results/smoke_report_cpu.json
+!loop_edit/results/SMOKE_GPU_PROGRESS.md
 loop_edit/results/directions.npz

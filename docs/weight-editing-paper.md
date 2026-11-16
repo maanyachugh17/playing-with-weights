@@ -11,7 +11,7 @@
 
 Small reasoning models often fail by repeating text until they hit a token limit. Prior work showed that an agent-written rank-one edit of MLP `down_proj` weights (Astra) and a closed-form rule in the same family (CLC-sel) can reduce thinking-mode loops on Qwen3.5-0.8B. Separately, Deletion Tuning shows that learning which gate-projection weights to zero can match much heavier post-training. We re-derive both classes of intervention from **our own** generations and a **short** mask train—without copying published edited tensors into the discovery loop.
 
-On a CPU smoke protocol (thinking on, max 512–1024 new tokens, no early-stop during selection/eval), a difference-of-means direction from early vs late windows of our generations localizes strongest residual change at late layers, but **selection on held-out practice prefers layers 21 and 20** with strength α = 8 and k = 64 columns per layer. That candidate beats the unedited base on loop metrics in the 8-problem sweep (early-repeat rate 0.875 vs 1.0; no-repeat rate 0.125 vs 0.0). Editing the gap-top layers 23/22 at the same α/k *worsens* tight 8-gram loops—evidence that localization ≠ edit selection. A reduced-steps Deletion Tuning run on Qwen2.5-0.5B produces our own compressed `gate_proj` mask in the upstream packbits+zstd format; we report deleted fraction, train cost, and base vs masked behavior under the same honesty constraints. Full MATH-500 and paper-parity GRPO are out of scope.
+On a CPU smoke protocol (thinking on, max 512–1024 new tokens, no early-stop during selection/eval), a difference-of-means direction from early vs late windows of our generations localizes strongest residual change at late layers, but **selection on held-out practice prefers layers 21 and 20** with strength α = 8 and k = 64 columns per layer. That candidate beats the unedited base on loop metrics in the 8-problem sweep (early-repeat rate 0.875 vs 1.0; no-repeat rate 0.125 vs 0.0). Editing the gap-top layers 23/22 at the same α/k *worsens* tight 8-gram loops—evidence that localization ≠ edit selection. We also re-smoke the frozen edit on an **Intel Arc 140V XPU** host at max-new 4096: hit-caps stay near 1.0 and the edit does **not** beat base on the composite smoke score under that longer budget—honest negative at the longer horizon. A reduced-steps Deletion Tuning run on Qwen2.5-0.5B produces our own compressed `gate_proj` mask in the upstream packbits+zstd format; we report deleted fraction, train cost, and base vs masked behavior under the same honesty constraints. Full MATH-500 and paper-parity GRPO are out of scope.
 
 ---
 
@@ -82,11 +82,12 @@ W' = W - \alpha\, u\,(m \odot s)^\top.
 
 | Item | Setting |
 | --- | --- |
-| Hardware | CPU only (no GPU / no self-hosted workers in this run) |
-| Approx. decode speed | ~14 tok/s (Qwen3.5-0.8B, float32, reference linear-attention kernels) |
+| Hardware (discovery / CPU smoke) | CPU float32 (initial run) |
+| Hardware (long smoke) | Intel Arc™ 140V (16GB) via PyTorch **XPU** (`torch 2.15.0+xpu`, bf16) — **not** NVIDIA CUDA |
+| Approx. decode speed | ~14 tok/s CPU (float32, reference kernels); ~5–14 tok/s observed on Arc XPU depending on memory pressure |
 | Diagnose max new tokens | 640 (with early-stop for throughput) |
 | Sweep max new tokens | 512, **stop_on_repeat=False** |
-| Smoke max new tokens | 1024 (target band 4k–8k when GPU allows; CPU-capped here) |
+| Smoke max new tokens | **CPU:** 1024; **XPU re-smoke:** **4096** (same split, no early-stop) |
 | Sampling | temperature 0.6, top_p 0.95, top_k 20 (loop edit) |
 
 Early-stop during *diagnose* compresses wall time but collapses severity differences if used for *selection*. After an initial failed sweep that looked uniformly “early=True,” we switched selection/eval to full capped generations and track `first_repeat_at` / `mean_max_8gram` / `no_repeat_rate`.
@@ -135,9 +136,11 @@ Top residual gaps: layers **23 > 22 > 21 > 20 > 19 > 18 > … > 15**. Layer 15 a
 
 ### 5.4 Smoke eval vs base (~25 problems)
 
-Protocol: 25 held-out GSM8K train problems, max 1024 new tokens, `stop_on_repeat=False`, same seed for base and edited.
+Same frozen edit (L21–20, α=8, k=64) and the same 25 held-out GSM8K prompts / seed; `stop_on_repeat=False`. Two hardware budgets:
 
-| Metric | Base | Edited (L21–20, α=8, k=64) |
+**CPU smoke** (`smoke_report.json` / `smoke_report_cpu.json`): max-new **1024**.
+
+| Metric | CPU Base | CPU Edited |
 | --- | ---: | ---: |
 | \(n\) | 25 | 25 |
 | Hit-cap rate | 1.00 | **0.96** |
@@ -149,7 +152,22 @@ Protocol: 25 held-out GSM8K train problems, max 1024 new tokens, `stop_on_repeat
 | Boxed rate | 0.20 | **0.24** |
 | Math-verify (graded subset) | 0.00 (5 graded) | 0.17 (6 graded) |
 
-The edit **beats base** on the composite loop/completion criteria used in code (`beats_base: true`): lower hit-cap and early-repeat, higher boxed and no-repeat, later mean first-repeat. Gains are modest under a 1024-token CPU cap; they are not MATH-500 claims.
+**XPU / Arc smoke** (`smoke_report_gpu.json`): Intel Arc 140V, bf16, max-new **4096**.
+
+| Metric | XPU Base | XPU Edited |
+| --- | ---: | ---: |
+| \(n\) | 25 | 25 |
+| Hit-cap rate | **0.96** | 1.00 |
+| Early-repeat rate | 1.00 | 1.00 |
+| No-repeat rate | 0.00 | 0.00 |
+| Mean first-repeat | 347.3 | **378.2** |
+| Mean max 8-gram | **35.9** | 41.0 |
+| Mean tokens | **3994.6** | 4096.0 |
+| Boxed rate | **0.40** | 0.32 |
+| Math-verify (graded subset) | 0.00 (10 graded) | 0.00 (8 graded) |
+| `beats_base` (code composite) | — | **false** |
+
+Under the 1024-token CPU cap the edit **beats base** on the composite criteria (`beats_base: true`). At the 4096-token XPU budget, hit-caps remain near **1.0**, no-repeat stays **0**, boxed falls (0.40→0.32), and mean max-8-gram rises; the only favorable movement is a later mean first-repeat (347→378). That is an honest **null/negative** at the longer horizon—not a claim that the edit “fails forever,” but evidence that the CPU win does not automatically scale when generations are allowed to run four times longer. These are still not MATH-500 claims.
 
 ### 5.5 Deletion Tuning (our mask)
 
@@ -180,7 +198,7 @@ Released Jacklu0831 masks were **not** used to choose the train.
 
 **Direction quality.** With almost no clean finishes under CPU caps, we used early vs late windows instead of pre-`</think>` states. That proxy can mix “still reasoning” with “about to close,” and may explain why edits delay or thin loops more than they create boxed answers.
 
-**CPU smoke protocol.** Caps of 512–1024 new tokens understate 32k thinking-mode behavior. Hit-cap rates near 1.0 are expected; metrics that still move (first-repeat index, no-repeat rate, 8-gram severity, boxed rate) are the honest signals here.
+**Smoke protocol / hardware.** Discovery and the first smoke used CPU caps of 512–1024. We later re-ran the frozen edit on Intel Arc 140V (**XPU**, not CUDA) at max-new 4096. Hit-caps stay near 1.0 even with the longer budget; the metric that still moves usefully on XPU is mainly first-repeat index, while boxed and 8-gram severity do **not** improve. The earlier “CPU-only” limitation is outdated for smoke hardware, but NVIDIA CUDA remains unavailable on this host.
 
 **Deletion Tuning.** Without GPU verl, we could not match paper GRPO. Our delivered mask is a sparse Wanda-style delete on `gate_proj` calibrated on our GSM8K forwards (0.021% of model weights). On a 16-problem probe the masked model did **not** beat base reward—honest negative/null under this protocol. The artifact still demonstrates end-to-end “our mask” export in the upstream bitmap format.
 
@@ -201,7 +219,8 @@ We derived a thinking-loop weight edit and a deletion mask from our own rollouts
 - Localization: `loop_edit/results/localization.json`
 - Layer sweep: `loop_edit/results/layer_sweep_report.json`
 - Frozen spec: `loop_edit/results/frozen_edit.json`
-- Smoke: `loop_edit/results/smoke_report.json`
+- Smoke (CPU): `loop_edit/results/smoke_report.json` / `smoke_report_cpu.json`
+- Smoke (XPU / Arc, max-new 4096): `loop_edit/results/smoke_report_gpu.json`
 
 ## Appendix B — Deletion-tuning artifacts
 
@@ -215,5 +234,6 @@ We derived a thinking-loop weight edit and a deletion mask from our own rollouts
 PYTHONPATH=weight-edits python -m loop_edit.run_phase1 --reuse-diagnose ...
 PYTHONPATH=weight-edits python -m loop_edit.sweep_layers --alpha 8 --k 64 --max-new 512
 PYTHONPATH=weight-edits python -m loop_edit.smoke_eval --max-new 1024
+python -m loop_edit.smoke_eval --device xpu --max-new 4096 --resume
 python weight-edits/deletion_tuning/train_mask.py --model Qwen/Qwen2.5-0.5B --steps 20
 ```

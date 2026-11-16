@@ -1,0 +1,54 @@
+{
+  "incomplete": false,
+  "edit_spec": "C:\\Users\\maany\\playing-with-weights-gpu-smoke\\repo\\loop_edit\\results\\frozen_edit.json",
+  "layers": [
+    21,
+    20
+  ],
+  "alpha": 8.0,
+  "k": 64,
+  "smoke_base": {
+    "n": 25,
+    "hit_cap_rate": 0.96,
+    "early_repeat_rate": 1.0,
+    "boxed_rate": 0.4,
+    "finished_clean_rate": 0.0,
+    "mean_tokens": 3994.64,
+    "mean_max_8gram": 35.92,
+    "mean_first_repeat_at": 347.28,
+    "no_repeat_rate": 0.0,
+    "math_verify_rate": 0.0,
+    "n_graded": 10
+  },
+  "smoke_edited": {
+    "n": 25,
+    "hit_cap_rate": 1.0,
+    "early_repeat_rate": 1.0,
+    "boxed_rate": 0.32,
+    "finished_clean_rate": 0.0,
+    "mean_tokens": 4096.0,
+    "mean_max_8gram": 41.0,
+    "mean_first_repeat_at": 378.2,
+    "no_repeat_rate": 0.0,
+    "math_verify_rate": 0.0,
+    "n_graded": 8
+  },
+  "beats_base": false,
+  "protocol": {
+    "max_new": 4096,
+    "stop_on_repeat": false,
+    "device": "xpu",
+    "device_name": "Intel(R) Arc(TM) 140V GPU (16GB)",
+    "dtype": "torch.bfloat16",
+    "n": 25,
+    "n_base_completed": 25,
+    "n_edited_completed": 25,
+    "backend": "intel_xpu",
+    "resume": true
+  },
+  "artifacts": {
+    "base_generations": "C:\\Users\\maany\\playing-with-weights-gpu-smoke\\repo\\loop_edit\\results\\smoke_base_gpu.jsonl",
+    "edited_generations": "C:\\Users\\maany\\playing-with-weights-gpu-smoke\\repo\\loop_edit\\results\\smoke_edited_gpu.jsonl",
+    "report": "C:\\Users\\maany\\playing-with-weights-gpu-smoke\\repo\\loop_edit\\results\\smoke_report_gpu.json"
+  }
+}

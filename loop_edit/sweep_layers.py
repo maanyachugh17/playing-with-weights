@@ -47,7 +47,9 @@ def main():
     ap.add_argument("--k", type=int, default=64)
     ap.add_argument("--seed", type=int, default=100)
     args = ap.parse_args()
-    device = "cuda" if args.device == "auto" and torch.cuda.is_available() else (args.device if args.device != "auto" else "cpu")
+    from .generate import resolve_device
+
+    device = resolve_device(args.device)
 
     loc = json.loads((RESULTS / "localization.json").read_text())
     combined = loc["combined"]
