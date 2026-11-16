@@ -1,19 +1,14 @@
 {
   "incomplete": true,
-  "status": "soft_stopped_before_laptop_sleep",
+  "status": "oom_soft_checkpoint_base_23_of_25",
   "protocol_target": {
     "max_new": 4096,
-    "n_full_smoke_split": 25,
-    "stop_on_repeat": false,
-    "device": "xpu",
-    "device_name": "Intel(R) Arc(TM) 140V GPU (16GB)",
-    "backend": "intel_xpu",
-    "dtype": "torch.bfloat16",
-    "edit": "frozen L21-20 alpha=8 k=64"
+    "n": 25,
+    "device": "xpu"
   },
   "completed": {
     "base": {
-      "n": 7,
+      "n": 23,
       "ids": [
         "gsm8k-291",
         "gsm8k-227",
@@ -21,46 +16,32 @@
         "gsm8k-108",
         "gsm8k-90",
         "gsm8k-262",
-        "gsm8k-287"
-      ],
-      "summary": {
-        "n": 7,
-        "hit_cap_rate": 1.0,
-        "early_repeat_rate": 1.0,
-        "boxed_rate": 0.5714285714285714,
-        "finished_clean_rate": 0.0,
-        "mean_tokens": 4096.0,
-        "mean_max_8gram": 30.142857142857142,
-        "mean_first_repeat_at": 453.85714285714283,
-        "no_repeat_rate": 0.0,
-        "math_verify_rate": 0.0,
-        "n_graded": 4
-      }
+        "gsm8k-287",
+        "gsm8k-229",
+        "gsm8k-237",
+        "gsm8k-267",
+        "gsm8k-286",
+        "gsm8k-129",
+        "gsm8k-112",
+        "gsm8k-177",
+        "gsm8k-281",
+        "gsm8k-275",
+        "gsm8k-166",
+        "gsm8k-34",
+        "gsm8k-101",
+        "gsm8k-163",
+        "gsm8k-46",
+        "gsm8k-274",
+        "gsm8k-116"
+      ]
     },
     "edited": {
       "n": 0,
-      "ids": [],
-      "summary": null
+      "ids": []
     }
   },
   "remaining": {
     "base_ids": [
-      "gsm8k-229",
-      "gsm8k-237",
-      "gsm8k-267",
-      "gsm8k-286",
-      "gsm8k-129",
-      "gsm8k-112",
-      "gsm8k-177",
-      "gsm8k-281",
-      "gsm8k-275",
-      "gsm8k-166",
-      "gsm8k-34",
-      "gsm8k-101",
-      "gsm8k-163",
-      "gsm8k-46",
-      "gsm8k-274",
-      "gsm8k-116",
       "gsm8k-14",
       "gsm8k-84"
     ],
@@ -90,14 +71,8 @@
       "gsm8k-116",
       "gsm8k-14",
       "gsm8k-84"
-    ],
-    "note": "Full protocol still requires base remaining + all 25 edited generations."
+    ]
   },
-  "artifacts": {
-    "base_generations": "loop_edit/results/smoke_base_gpu.jsonl",
-    "edited_generations": null,
-    "full_report": null,
-    "this_file": "loop_edit/results/smoke_report_gpu.partial.json"
-  },
+  "oom_error": "UR_RESULT_ERROR_OUT_OF_DEVICE_MEMORY on sample after gsm8k-116",
   "do_not_treat_as_full_smoke": true
 }

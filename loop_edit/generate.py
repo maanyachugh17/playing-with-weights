@@ -178,4 +178,15 @@ def generate_dataset(
             f"m8={m.max_8gram_count} boxed={m.has_boxed}",
             flush=True,
         )
+        # Arc/XPU long runs fragment device memory; clear between samples.
+        if device.startswith("xpu") and hasattr(torch, "xpu"):
+            try:
+                torch.xpu.empty_cache()
+            except Exception:
+                pass
+        elif device.startswith("cuda") and torch.cuda.is_available():
+            try:
+                torch.cuda.empty_cache()
+            except Exception:
+                pass
     return rows

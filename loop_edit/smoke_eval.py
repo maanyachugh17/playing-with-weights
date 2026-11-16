@@ -121,6 +121,11 @@ def main():
                     f"m8={m.max_8gram_count} boxed={m.has_boxed}",
                     flush=True,
                 )
+                if device.startswith("xpu") and hasattr(torch, "xpu"):
+                    try:
+                        torch.xpu.empty_cache()
+                    except Exception:
+                        pass
             base_rows.extend(new_rows)
     else:
         if base_path.exists():
@@ -161,6 +166,11 @@ def main():
                     f"m8={m.max_8gram_count} boxed={m.has_boxed}",
                     flush=True,
                 )
+                if device.startswith("xpu") and hasattr(torch, "xpu"):
+                    try:
+                        torch.xpu.empty_cache()
+                    except Exception:
+                        pass
             edit_rows.extend(new_rows)
     else:
         if edit_path.exists():
