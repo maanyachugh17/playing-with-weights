@@ -21,6 +21,12 @@ def get_down_proj(layer) -> torch.nn.Linear:
     return layer.mlp.down_proj
 
 
+def _slice_mean(h: torch.Tensor, start: int, end: int) -> np.ndarray:
+    start = max(0, min(start, h.shape[0]))
+    end = max(start + 1, min(end, h.shape[0]))
+    return h[start:end].mean(0).numpy()
+
+
 @torch.no_grad()
 def forward_hidden_windows(
     model,
@@ -31,8 +37,19 @@ def forward_hidden_windows(
     late_window: int = 64,
     max_length: int = 1024,
     device: str = "cpu",
+    prompt_len: int | None = None,
+    mode: str = "full_seq",
+    first_repeat_at: int | None = None,
 ) -> dict[int, tuple[np.ndarray, np.ndarray]]:
-    """Teacher-force full text; return per-layer (early_mean, late_mean) over residual stream."""
+    """Teacher-force full text; return per-layer (early_mean, late_mean) over residual stream.
+
+    Modes:
+      - full_seq: first/last windows of the entire teacher-forced sequence (legacy).
+      - gen_early_late: first/last windows of the *generation* span only (excludes prompt).
+      - preloop_loop: window just before first 8-gram repeat vs window in the looping tail.
+      - think_close: if ``</think>`` appears in generation, late=window before close token,
+        early=earlier productive span (CLC-flavored when finishes exist).
+    """
     layer_mods = get_layers(model)
     caches: dict[int, torch.Tensor] = {}
     hooks = []
@@ -56,18 +73,94 @@ def forward_hidden_windows(
         )
         enc = {k: v.to(device) for k, v in enc.items()}
         _ = model(**enc, use_cache=False)
+        seq_len = int(enc["input_ids"].shape[1])
+        if prompt_len is None:
+            prompt_len = 0
+        prompt_len = max(0, min(int(prompt_len), seq_len - 1))
+        gen_len = max(seq_len - prompt_len, 1)
+
+        # Optional </think> index within generation (token ids).
+        close_rel: int | None = None
+        try:
+            close_ids = tokenizer.encode("</think>", add_special_tokens=False)
+            ids = enc["input_ids"][0].tolist()
+            gen_ids = ids[prompt_len:]
+            if close_ids and len(gen_ids) >= len(close_ids):
+                n = len(close_ids)
+                for i in range(len(gen_ids) - n + 1):
+                    if gen_ids[i : i + n] == close_ids:
+                        close_rel = i
+                        break
+        except Exception:
+            close_rel = None
+
         out: dict[int, tuple[np.ndarray, np.ndarray]] = {}
         for idx in layers:
             h = caches[idx][0].float().cpu()  # (seq, d)
             seq = h.shape[0]
-            if seq < early_window + late_window:
-                # Split halves
-                mid = max(seq // 2, 1)
-                early = h[:mid].mean(0).numpy()
-                late = h[mid:].mean(0).numpy()
+            pl = min(prompt_len, seq - 1)
+
+            if mode == "full_seq":
+                if seq < early_window + late_window:
+                    mid = max(seq // 2, 1)
+                    early = _slice_mean(h, 0, mid)
+                    late = _slice_mean(h, mid, seq)
+                else:
+                    early = _slice_mean(h, 0, early_window)
+                    late = _slice_mean(h, seq - late_window, seq)
+            elif mode == "gen_early_late":
+                if gen_len < early_window + late_window:
+                    mid = pl + max(gen_len // 2, 1)
+                    early = _slice_mean(h, pl, mid)
+                    late = _slice_mean(h, mid, seq)
+                else:
+                    early = _slice_mean(h, pl, pl + early_window)
+                    late = _slice_mean(h, seq - late_window, seq)
+            elif mode == "preloop_loop":
+                # first_repeat_at is relative to generation tokens.
+                fr = first_repeat_at
+                if fr is None or fr < max(early_window // 2, 16):
+                    # Fall back to gen early/late when loop onset is unknown/too early.
+                    if gen_len < early_window + late_window:
+                        mid = pl + max(gen_len // 2, 1)
+                        early = _slice_mean(h, pl, mid)
+                        late = _slice_mean(h, mid, seq)
+                    else:
+                        early = _slice_mean(h, pl, pl + early_window)
+                        late = _slice_mean(h, seq - late_window, seq)
+                else:
+                    abs_fr = pl + int(fr)
+                    early_end = abs_fr
+                    early_start = max(pl, early_end - early_window)
+                    late_start = min(abs_fr, seq - 1)
+                    late_end = min(seq, late_start + late_window)
+                    # Prefer the true looping tail when long enough.
+                    if seq - abs_fr >= late_window:
+                        late_start = seq - late_window
+                        late_end = seq
+                    early = _slice_mean(h, early_start, early_end)
+                    late = _slice_mean(h, late_start, late_end)
+            elif mode == "think_close":
+                if close_rel is not None and close_rel > early_window:
+                    abs_close = pl + close_rel
+                    # CLC-flavored: late ≈ states approaching </think>; early ≈ earlier gen.
+                    late = _slice_mean(h, max(pl, abs_close - late_window), abs_close)
+                    early = _slice_mean(h, pl, pl + early_window)
+                    # Flip polarity later: for think_close we want u toward *loop*, so if
+                    # this row finished, treat close-window as the "good" state (early here)
+                    # and use a mid/late looping proxy when available. For finished rows
+                    # alone this mode builds finish-ward; caller may invert.
+                else:
+                    # No close tag — use gen early/late (loopward).
+                    if gen_len < early_window + late_window:
+                        mid = pl + max(gen_len // 2, 1)
+                        early = _slice_mean(h, pl, mid)
+                        late = _slice_mean(h, mid, seq)
+                    else:
+                        early = _slice_mean(h, pl, pl + early_window)
+                        late = _slice_mean(h, seq - late_window, seq)
             else:
-                early = h[:early_window].mean(0).numpy()
-                late = h[-late_window:].mean(0).numpy()
+                raise ValueError(f"Unknown activation window mode: {mode}")
             out[idx] = (early, late)
         return out
     finally:
@@ -85,11 +178,12 @@ def collect_early_late_from_generations(
     max_length: int = 1024,
     early_window: int = 64,
     late_window: int = 64,
+    mode: str = "gen_early_late",
 ) -> dict[str, Any]:
     """Build contrast from early vs late windows inside our own generations.
 
-    Early ≈ productive reasoning; late ≈ looping tail. This does not use external
-    edited tensors and works when few completions finish cleanly.
+    Default mode ``gen_early_late`` excludes the prompt (unlike legacy ``full_seq``).
+    Early ≈ productive reasoning; late ≈ looping tail. Does not use external edited tensors.
     """
     layer_mods = get_layers(model)
     all_layers = list(range(len(layer_mods)))
@@ -98,7 +192,11 @@ def collect_early_late_from_generations(
 
     for row in rows:
         prompt = format_prompt_fn(tokenizer, row["prompt"], enable_thinking=True)
-        full = prompt + (row.get("text") or "")
+        completion = row.get("text") or ""
+        full = prompt + completion
+        prompt_ids = tokenizer(prompt, add_special_tokens=False)["input_ids"]
+        metrics = row.get("metrics") or {}
+        first_rep = metrics.get("first_repeat_at")
         windows = forward_hidden_windows(
             model,
             tokenizer,
@@ -108,6 +206,9 @@ def collect_early_late_from_generations(
             late_window=late_window,
             max_length=max_length,
             device=device,
+            prompt_len=len(prompt_ids),
+            mode=mode,
+            first_repeat_at=first_rep if isinstance(first_rep, int) else None,
         )
         for idx, (e, l) in windows.items():
             early_acc[idx].append(e)
@@ -115,7 +216,15 @@ def collect_early_late_from_generations(
 
     h_early = {i: np.stack(v, 0) for i, v in early_acc.items()}
     h_late = {i: np.stack(v, 0) for i, v in late_acc.items()}
-    return {"h_early": h_early, "h_late": h_late, "n_layers": len(layer_mods), "n": len(rows)}
+    return {
+        "h_early": h_early,
+        "h_late": h_late,
+        "n_layers": len(layer_mods),
+        "n": len(rows),
+        "mode": mode,
+        "early_window": early_window,
+        "late_window": late_window,
+    }
 
 
 @torch.no_grad()

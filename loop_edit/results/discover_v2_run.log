@@ -1,0 +1,290 @@
+Loading Qwen/Qwen3.5-0.8B on cpu...
+Loading weights:   0%|          | 0/320 [00:00<?, ?it/s]Loading weights:   0%|          | 1/320 [00:00<01:16,  4.19it/s]Loading weights:  73%|███████▎  | 234/320 [00:00<00:00, 857.89it/s]Loading weights: 100%|██████████| 320/320 [00:00<00:00, 693.03it/s]
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+=== Diagnose v2 ===
+[transformers] `causal_conv1d_fn` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `chunk_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+[transformers] `causal_conv1d_update` is falling back to its reference PyTorch implementation because `causal_conv1d` is not installed. This is correct but much slower; install `causal_conv1d` for the optimized kernel.
+[transformers] `fused_recurrent_gated_delta_rule` is falling back to its reference PyTorch implementation because `flash-linear-attention` is not installed. This is correct but much slower; install `flash-linear-attention` for the optimized kernel.
+[1/20] gsm8k-110 tokens=469 hit_cap=False early=True first_rep=469 m8=3 boxed=False
+[2/20] gsm8k-195 tokens=295 hit_cap=False early=True first_rep=295 m8=3 boxed=False
+[3/20] gsm8k-102 tokens=512 hit_cap=True early=True first_rep=447 m8=3 boxed=True
+[4/20] gsm8k-78 tokens=166 hit_cap=False early=True first_rep=166 m8=3 boxed=False
+[5/20] gsm8k-268 tokens=261 hit_cap=False early=True first_rep=261 m8=3 boxed=False
+[6/20] gsm8k-13 tokens=212 hit_cap=False early=True first_rep=212 m8=3 boxed=False
+[7/20] gsm8k-172 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[8/20] gsm8k-57 tokens=501 hit_cap=False early=True first_rep=501 m8=3 boxed=True
+[9/20] gsm8k-3 tokens=242 hit_cap=False early=True first_rep=242 m8=3 boxed=False
+[10/20] gsm8k-142 tokens=174 hit_cap=False early=True first_rep=174 m8=3 boxed=False
+[11/20] math-132-c628482899ae tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[12/20] math-165-0d2d0a805c42 tokens=234 hit_cap=False early=True first_rep=234 m8=3 boxed=True
+[13/20] math-102-143f6d8a0d4a tokens=221 hit_cap=False early=True first_rep=221 m8=3 boxed=False
+[14/20] math-32-31de7675719a tokens=156 hit_cap=False early=True first_rep=156 m8=3 boxed=False
+[15/20] math-29-1f79334837be tokens=269 hit_cap=False early=True first_rep=269 m8=3 boxed=True
+[16/20] math-81-c78be5180245 tokens=233 hit_cap=False early=True first_rep=233 m8=3 boxed=False
+[17/20] math-114-333b42f00d98 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[18/20] math-13-3d097e00fd59 tokens=211 hit_cap=False early=True first_rep=211 m8=3 boxed=False
+[19/20] math-3-564a09d773be tokens=301 hit_cap=False early=True first_rep=301 m8=3 boxed=True
+[20/20] math-33-047796360188 tokens=241 hit_cap=False early=True first_rep=241 m8=3 boxed=False
+Diagnose v2: {"n": 20, "hit_cap_rate": 0.2, "early_repeat_rate": 0.85, "boxed_rate": 0.25, "finished_clean_rate": 0.0, "mean_tokens": 311.7, "mean_max_8gram": 2.85, "mean_first_repeat_at": 272.52941176470586, "no_repeat_rate": 0.15, "math_verify_rate": 0.0, "n_graded": 2}
+Contrast rows: 10 (looping=20)
+=== Activations gen_early_late_e64_l64 ===
+gen_early_late_e64_l64 top layers: [23, 22, 21, 19, 20, 17]
+=== Activations preloop_loop_e64_l96 ===
+preloop_loop_e64_l96 top layers: [23, 22, 21, 20, 19, 18]
+=== Activations gen_early_late_e32_l96 ===
+gen_early_late_e32_l96 top layers: [23, 22, 21, 20, 19, 18]
+Sweep schedule: 16 candidates
+=== BASE sweep ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=True first_rep=381 m8=4 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=367 m8=3 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=296 m8=3 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=302 m8=3 boxed=True
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=231 m8=4 boxed=True
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=186 m8=4 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=193 m8=3 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=232 m8=5 boxed=False
+base score=-1.259 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 1.0, 'boxed_rate': 0.25, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 3.625, 'mean_first_repeat_at': 273.5, 'no_repeat_rate': 0.0, 'math_verify_rate': 0.0, 'n_graded': 1}
+=== OLD frozen edit on sweep protocol ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=True first_rep=435 m8=4 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=321 m8=3 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=314 m8=3 boxed=True
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=256 m8=3 boxed=True
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=186 m8=3 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=184 m8=3 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=245 m8=6 boxed=False
+old_frozen score=-0.989 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 0.875, 'boxed_rate': 0.25, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 3.375, 'mean_first_repeat_at': 277.2857142857143, 'no_repeat_rate': 0.125, 'math_verify_rate': 0.0, 'n_graded': 1}
+=== [1/16] gen_early_late_e64_l64_a8.0_k64_L21-20 ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=True first_rep=385 m8=4 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=510 m8=3 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=145 m8=3 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=194 m8=5 boxed=False
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=508 m8=3 boxed=False
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=160 m8=4 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=161 m8=7 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=340 m8=6 boxed=False
+gen_early_late_e64_l64_a8.0_k64_L21-20: score=-1.618 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 1.0, 'boxed_rate': 0.0, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 4.375, 'mean_first_repeat_at': 300.375, 'no_repeat_rate': 0.0}
+=== [2/16] gen_early_late_e64_l64_a8.0_k64_L18-19 ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=True first_rep=89 m8=5 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=178 m8=3 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=109 m8=3 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=261 m8=3 boxed=True
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=228 m8=3 boxed=False
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=297 m8=4 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=249 m8=4 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=308 m8=6 boxed=False
+gen_early_late_e64_l64_a8.0_k64_L18-19: score=-1.576 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 1.0, 'boxed_rate': 0.125, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 3.875, 'mean_first_repeat_at': 214.875, 'no_repeat_rate': 0.0, 'math_verify_rate': 0.0, 'n_graded': 1}
+=== [3/16] gen_early_late_e64_l64_a8.0_k64_L21-19 ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=True first_rep=265 m8=4 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=456 m8=3 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=251 m8=6 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=368 m8=3 boxed=True
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=467 m8=3 boxed=False
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=160 m8=3 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=464 m8=3 boxed=False
+gen_early_late_e64_l64_a8.0_k64_L21-19: score=-1.037 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 0.875, 'boxed_rate': 0.125, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 3.375, 'mean_first_repeat_at': 347.2857142857143, 'no_repeat_rate': 0.125, 'math_verify_rate': 0.0, 'n_graded': 1}
+=== [4/16] gen_early_late_e64_l64_a8.0_k64_L17-16 ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=176 m8=3 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=317 m8=3 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=True
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=170 m8=4 boxed=False
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=307 m8=5 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=497 m8=3 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=252 m8=5 boxed=False
+gen_early_late_e64_l64_a8.0_k64_L17-16: score=-0.908 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 0.75, 'boxed_rate': 0.125, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 3.375, 'mean_first_repeat_at': 286.5, 'no_repeat_rate': 0.25, 'math_verify_rate': 0.0, 'n_graded': 1}
+=== [5/16] gen_early_late_e64_l64_a8.0_k64_L21 ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=246 m8=3 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=387 m8=3 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=219 m8=6 boxed=False
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=256 m8=3 boxed=True
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=160 m8=4 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=386 m8=3 boxed=False
+gen_early_late_e64_l64_a8.0_k64_L21: score=-0.924 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 0.75, 'boxed_rate': 0.125, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 3.25, 'mean_first_repeat_at': 275.6666666666667, 'no_repeat_rate': 0.25}
+=== [6/16] gen_early_late_e64_l64_a8.0_k64_L20 ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=True first_rep=246 m8=6 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=411 m8=3 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=284 m8=4 boxed=False
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=170 m8=4 boxed=False
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=313 m8=5 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=122 m8=5 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=304 m8=6 boxed=False
+gen_early_late_e64_l64_a8.0_k64_L20: score=-1.440 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 0.875, 'boxed_rate': 0.0, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 4.375, 'mean_first_repeat_at': 264.2857142857143, 'no_repeat_rate': 0.125}
+=== [7/16] gen_early_late_e64_l64_a8.0_k64_L19 ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=True first_rep=193 m8=4 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=351 m8=3 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=190 m8=4 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=491 m8=3 boxed=False
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=283 m8=4 boxed=False
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=297 m8=3 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=261 m8=3 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=199 m8=6 boxed=False
+gen_early_late_e64_l64_a8.0_k64_L19: score=-1.621 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 1.0, 'boxed_rate': 0.0, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 3.75, 'mean_first_repeat_at': 283.125, 'no_repeat_rate': 0.0}
+=== [8/16] gen_early_late_e64_l64_a8.0_k64_L21-20_shared ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=True first_rep=346 m8=3 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=145 m8=3 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=203 m8=8 boxed=False
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=422 m8=3 boxed=True
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=386 m8=3 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=177 m8=6 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=328 m8=3 boxed=False
+gen_early_late_e64_l64_a8.0_k64_L21-20_shared: score=-1.183 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 0.875, 'boxed_rate': 0.125, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 3.875, 'mean_first_repeat_at': 286.7142857142857, 'no_repeat_rate': 0.125}
+=== [9/16] gen_early_late_e64_l64_a8.0_k64_L21-19_shared ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=True first_rep=288 m8=5 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=429 m8=3 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=110 m8=4 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=316 m8=4 boxed=True
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=234 m8=4 boxed=True
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=186 m8=4 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=351 m8=3 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=272 m8=5 boxed=False
+gen_early_late_e64_l64_a8.0_k64_L21-19_shared: score=-1.278 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 1.0, 'boxed_rate': 0.25, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 4.0, 'mean_first_repeat_at': 273.25, 'no_repeat_rate': 0.0, 'math_verify_rate': 0.0, 'n_graded': 1}
+=== [10/16] gen_early_late_e64_l64_a8.0_k64_L20-19_shared ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=True first_rep=312 m8=8 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=472 m8=3 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=430 m8=4 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=465 m8=3 boxed=False
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=162 m8=4 boxed=False
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=293 m8=4 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=250 m8=4 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=238 m8=6 boxed=False
+gen_early_late_e64_l64_a8.0_k64_L20-19_shared: score=-1.570 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 1.0, 'boxed_rate': 0.0, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 4.5, 'mean_first_repeat_at': 327.75, 'no_repeat_rate': 0.0}
+=== [11/16] gen_early_late_e64_l64_a8.0_k64_L18-19_shared ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=True first_rep=72 m8=36 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=193 m8=3 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=195 m8=5 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=240 m8=3 boxed=False
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=216 m8=3 boxed=False
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=340 m8=4 boxed=False
+gen_early_late_e64_l64_a8.0_k64_L18-19_shared: score=-1.444 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 0.75, 'boxed_rate': 0.0, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 7.25, 'mean_first_repeat_at': 209.33333333333334, 'no_repeat_rate': 0.25}
+=== [12/16] preloop_loop_e64_l96_a8.0_k64_L21-20 ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=True first_rep=368 m8=3 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=334 m8=3 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=253 m8=4 boxed=False
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=369 m8=3 boxed=True
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=242 m8=4 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=230 m8=3 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=276 m8=5 boxed=False
+preloop_loop_e64_l96_a8.0_k64_L21-20: score=-1.139 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 0.875, 'boxed_rate': 0.125, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 3.375, 'mean_first_repeat_at': 296.0, 'no_repeat_rate': 0.125}
+=== [13/16] preloop_loop_e64_l96_a8.0_k64_L18-19 ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=367 m8=3 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=380 m8=3 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=341 m8=5 boxed=True
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=231 m8=4 boxed=True
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=263 m8=3 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=159 m8=4 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=240 m8=4 boxed=False
+preloop_loop_e64_l96_a8.0_k64_L18-19: score=-0.984 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 0.875, 'boxed_rate': 0.25, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 3.5, 'mean_first_repeat_at': 283.0, 'no_repeat_rate': 0.125, 'math_verify_rate': 0.0, 'n_graded': 1}
+=== [14/16] preloop_loop_e64_l96_a8.0_k64_L21-19 ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=True first_rep=466 m8=3 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=381 m8=3 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=True
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=231 m8=4 boxed=True
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=429 m8=3 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=230 m8=3 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=284 m8=4 boxed=False
+preloop_loop_e64_l96_a8.0_k64_L21-19: score=-0.601 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 0.75, 'boxed_rate': 0.25, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 3.0, 'mean_first_repeat_at': 336.8333333333333, 'no_repeat_rate': 0.25, 'math_verify_rate': 0.0, 'n_graded': 1}
+=== [15/16] preloop_loop_e64_l96_a8.0_k64_L17-16 ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=410 m8=6 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=300 m8=3 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=302 m8=4 boxed=True
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=197 m8=3 boxed=False
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=160 m8=5 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=True first_rep=159 m8=4 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=319 m8=6 boxed=True
+preloop_loop_e64_l96_a8.0_k64_L17-16: score=-1.054 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 0.875, 'boxed_rate': 0.25, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 4.125, 'mean_first_repeat_at': 263.85714285714283, 'no_repeat_rate': 0.125, 'math_verify_rate': 0.0, 'n_graded': 1}
+=== [16/16] gen_early_late_e32_l96_a8.0_k64_L21-20 ===
+[1/8] gsm8k-212 tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[2/8] gsm8k-88 tokens=512 hit_cap=True early=True first_rep=149 m8=4 boxed=False
+[3/8] gsm8k-157 tokens=512 hit_cap=True early=True first_rep=110 m8=3 boxed=False
+[4/8] gsm8k-135 tokens=512 hit_cap=True early=True first_rep=300 m8=3 boxed=False
+[5/8] math-47-4fff9c456c0b tokens=512 hit_cap=True early=True first_rep=505 m8=3 boxed=False
+[6/8] math-124-3e6c743cb95e tokens=512 hit_cap=True early=True first_rep=155 m8=4 boxed=False
+[7/8] math-159-01cad358328c tokens=512 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[8/8] math-133-aec13021b81a tokens=512 hit_cap=True early=True first_rep=386 m8=4 boxed=False
+gen_early_late_e32_l96_a8.0_k64_L21-20: score=-1.121 {'n': 8, 'hit_cap_rate': 1.0, 'early_repeat_rate': 0.75, 'boxed_rate': 0.0, 'finished_clean_rate': 0.0, 'mean_tokens': 512.0, 'mean_max_8gram': 3.125, 'mean_first_repeat_at': 267.5, 'no_repeat_rate': 0.25}
+FROZE new edit → frozen_edit.json / frozen_edit_v2.json: preloop_loop_e64_l96_a8.0_k64_L21-19
+=== Smoke base n=12 max_new=768 ===
+[1/12] gsm8k-291 tokens=768 hit_cap=True early=True first_rep=315 m8=8 boxed=False
+[2/12] gsm8k-227 tokens=768 hit_cap=True early=True first_rep=259 m8=3 boxed=False
+[3/12] gsm8k-242 tokens=768 hit_cap=True early=True first_rep=453 m8=6 boxed=False
+[4/12] gsm8k-108 tokens=768 hit_cap=True early=True first_rep=357 m8=5 boxed=True
+[5/12] gsm8k-90 tokens=768 hit_cap=True early=True first_rep=202 m8=4 boxed=False
+[6/12] gsm8k-262 tokens=768 hit_cap=True early=True first_rep=277 m8=4 boxed=False
+[7/12] gsm8k-287 tokens=768 hit_cap=True early=True first_rep=394 m8=3 boxed=False
+[8/12] gsm8k-229 tokens=768 hit_cap=True early=True first_rep=102 m8=6 boxed=False
+[9/12] gsm8k-237 tokens=768 hit_cap=True early=True first_rep=255 m8=4 boxed=False
+[10/12] gsm8k-267 tokens=768 hit_cap=True early=True first_rep=463 m8=5 boxed=True
+[11/12] gsm8k-286 tokens=768 hit_cap=True early=True first_rep=295 m8=6 boxed=False
+[12/12] gsm8k-129 tokens=768 hit_cap=True early=True first_rep=443 m8=6 boxed=False
+=== Smoke edited (best v2 candidate) ===
+[1/12] gsm8k-291 tokens=768 hit_cap=True early=True first_rep=301 m8=5 boxed=False
+[2/12] gsm8k-227 tokens=768 hit_cap=True early=True first_rep=345 m8=3 boxed=True
+[3/12] gsm8k-242 tokens=768 hit_cap=True early=True first_rep=236 m8=5 boxed=False
+[4/12] gsm8k-108 tokens=768 hit_cap=True early=True first_rep=384 m8=4 boxed=False
+[5/12] gsm8k-90 tokens=768 hit_cap=True early=True first_rep=509 m8=3 boxed=True
+[6/12] gsm8k-262 tokens=768 hit_cap=True early=True first_rep=279 m8=5 boxed=False
+[7/12] gsm8k-287 tokens=768 hit_cap=True early=True first_rep=418 m8=5 boxed=False
+[8/12] gsm8k-229 tokens=768 hit_cap=True early=True first_rep=102 m8=4 boxed=False
+[9/12] gsm8k-237 tokens=768 hit_cap=True early=True first_rep=432 m8=5 boxed=False
+[10/12] gsm8k-267 tokens=768 hit_cap=True early=True first_rep=480 m8=4 boxed=False
+[11/12] gsm8k-286 tokens=768 hit_cap=True early=True first_rep=324 m8=6 boxed=False
+[12/12] gsm8k-129 tokens=768 hit_cap=True early=True first_rep=196 m8=5 boxed=False
+=== Smoke old frozen ===
+[1/12] gsm8k-291 tokens=768 hit_cap=True early=True first_rep=284 m8=8 boxed=False
+[2/12] gsm8k-227 tokens=768 hit_cap=True early=False first_rep=None m8=2 boxed=False
+[3/12] gsm8k-242 tokens=768 hit_cap=True early=True first_rep=298 m8=6 boxed=False
+[4/12] gsm8k-108 tokens=768 hit_cap=True early=True first_rep=246 m8=10 boxed=False
+[5/12] gsm8k-90 tokens=768 hit_cap=True early=True first_rep=191 m8=6 boxed=True
+[6/12] gsm8k-262 tokens=768 hit_cap=True early=True first_rep=343 m8=6 boxed=False
+[7/12] gsm8k-287 tokens=768 hit_cap=True early=True first_rep=671 m8=4 boxed=False
+[8/12] gsm8k-229 tokens=768 hit_cap=True early=True first_rep=86 m8=4 boxed=True
+[9/12] gsm8k-237 tokens=768 hit_cap=True early=True first_rep=325 m8=4 boxed=False
+[10/12] gsm8k-267 tokens=768 hit_cap=True early=True first_rep=315 m8=5 boxed=True
+[11/12] gsm8k-286 tokens=768 hit_cap=True early=True first_rep=227 m8=8 boxed=False
+[12/12] gsm8k-129 tokens=768 hit_cap=True early=True first_rep=257 m8=5 boxed=False
+=== discover_v2 report (summary) ===
+{
+  "best": {
+    "tag": "preloop_loop_e64_l96_a8.0_k64_L21-19",
+    "dir_tag": "preloop_loop_e64_l96",
+    "layers": [
+      21,
+      19
+    ],
+    "alpha": 8.0,
+    "k": 64,
+    "shared": false,
+    "summary": {
+      "n": 8,
+      "hit_cap_rate": 1.0,
+      "early_repeat_rate": 0.75,
+      "boxed_rate": 0.25,
+      "finished_clean_rate": 0.0,
+      "mean_tokens": 512.0,
+      "mean_max_8gram": 3.0,
+      "mean_first_repeat_at": 336.8333333333333,
+      "no_repeat_rate": 0.25,
+      "math_verify_rate": 0.0,
+      "n_graded": 1
+    },
+    "score": -0.6013333333333334
+  },
+  "beats_base": true,
+  "beats_old": true,
+  "froze_new": true,
+  "smoke_beats_base": false,
+  "elapsed_sec": 28857.972658872604
+}
